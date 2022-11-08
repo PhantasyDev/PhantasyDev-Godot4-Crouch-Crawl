@@ -1,0 +1,91 @@
+[gd_scene load_steps=14 format=3 uid="uid://dtoauvf4k7fwh"]
+
+[ext_resource type="PackedScene" uid="uid://b2dub3uv1y0b0" path="res://Player.tscn" id="1_708xe"]
+[ext_resource type="Texture2D" uid="uid://dwdugkgubq4k6" path="res://texture_06.png" id="1_xxedb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lf01x"]
+albedo_texture = ExtResource("1_xxedb")
+uv1_scale = Vector3(3, 2, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8gfub"]
+material = SubResource("StandardMaterial3D_lf01x")
+size = Vector3(40, 1, 40)
+
+[sub_resource type="Environment" id="Environment_sy3hx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v2q2x"]
+albedo_color = Color(1, 0.52549, 0.427451, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3ohcn"]
+material = SubResource("StandardMaterial3D_v2q2x")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rvwse"]
+albedo_color = Color(0.486275, 0.827451, 0.294118, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bl0e4"]
+material = SubResource("StandardMaterial3D_rvwse")
+size = Vector3(5, 2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5treo"]
+size = Vector3(6, 1, 1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_v8ev7"]
+points = PackedVector3Array(3, 0.5, 0.5, 3, 0.5, -0.5, -3, 0.5, 0.5, 3, -0.5, 0.5, 3, -0.5, -0.5, -3, 0.5, -0.5, -3, -0.5, 0.5, -3, -0.5, -0.5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_pi2m6"]
+points = PackedVector3Array(3, 0.5, 0.5, 3, 0.5, -0.5, -3, 0.5, 0.5, 3, -0.5, 0.5, 3, -0.5, -0.5, -3, 0.5, -0.5, -3, -0.5, 0.5, -3, -0.5, -0.5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_spdaa"]
+points = PackedVector3Array(3, 0.5, 0.5, 3, 0.5, -0.5, -3, 0.5, 0.5, 3, -0.5, 0.5, 3, -0.5, -0.5, -3, 0.5, -0.5, -3, -0.5, 0.5, -3, -0.5, -0.5)
+
+[node name="World" type="Node3D"]
+
+[node name="Floor" type="CSGMesh3D" parent="."]
+use_collision = true
+mesh = SubResource("BoxMesh_8gfub")
+
+[node name="Player" parent="." instance=ExtResource("1_708xe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.50638, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_sy3hx")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0.433013, 0.25, -7.19671e-09, -0.5, 0.866025, 0.5, -0.75, -0.433013, 0, 0, -28)
+shadow_enabled = true
+
+[node name="CrouchObstacle" type="CSGMesh3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.53506, -6)
+use_collision = true
+mesh = SubResource("BoxMesh_3ohcn")
+
+[node name="ProneObstacle" type="CSGMesh3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.41219, -6)
+use_collision = true
+mesh = SubResource("BoxMesh_bl0e4")
+
+[node name="TunnelObstacle" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TunnelObstacle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 0)
+mesh = SubResource("BoxMesh_5treo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TunnelObstacle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 0)
+shape = SubResource("ConvexPolygonShape3D_v8ev7")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="TunnelObstacle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 2)
+mesh = SubResource("BoxMesh_5treo")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="TunnelObstacle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 2)
+shape = SubResource("ConvexPolygonShape3D_pi2m6")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="TunnelObstacle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 1)
+mesh = SubResource("BoxMesh_5treo")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="TunnelObstacle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 1)
+shape = SubResource("ConvexPolygonShape3D_spdaa")

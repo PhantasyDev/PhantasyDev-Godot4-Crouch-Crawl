@@ -1,0 +1,120 @@
+[gd_scene load_steps=13 format=3 uid="uid://b2dub3uv1y0b0"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_klbkv"]
+[ext_resource type="Script" path="res://OrbitCam.gd" id="2_3ht4p"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2s24t"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_85nxn"]
+height = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_30qwu"]
+albedo_color = Color(0.207843, 1, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_plfqy"]
+material = SubResource("StandardMaterial3D_30qwu")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vsjhq"]
+radius = 0.4
+height = 1.5
+
+[sub_resource type="Animation" id="Animation_2i1xw"]
+resource_name = "CrouchToCrawl"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OrbitCam:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, -0.3, 0), Vector3(0, -0.8, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_2is1u"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OrbitCam:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_f5nqm"]
+resource_name = "StandingToCrawl"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OrbitCam:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.8, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_aypi3"]
+resource_name = "StandingToCrouch"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OrbitCam:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.3, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ufu0m"]
+_data = {
+"CrouchToCrawl": SubResource("Animation_2i1xw"),
+"RESET": SubResource("Animation_2is1u"),
+"StandingToCrawl": SubResource("Animation_f5nqm"),
+"StandingToCrouch": SubResource("Animation_aypi3")
+}
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_klbkv")
+
+[node name="StandingCollisionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_2s24t")
+
+[node name="CrouchingCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.248883, 0)
+shape = SubResource("CapsuleShape3D_85nxn")
+disabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_plfqy")
+
+[node name="OrbitCam" type="Node3D" parent="."]
+script = ExtResource("2_3ht4p")
+
+[node name="Camera3D" type="Camera3D" parent="OrbitCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.617629, -0.463167)
+
+[node name="CrawlingCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.584589, 0.225536)
+shape = SubResource("CapsuleShape3D_vsjhq")
+disabled = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ufu0m")
+}
